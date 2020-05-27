@@ -14,7 +14,7 @@ Packages are a built-in feature of Unity. This plugin adds a custom editor windo
 5. You can now find the plugin in the top menu under `DSU -> Create New Package`
 
 ## Update To The Latest Version
-When you add this plugin (or a package created by this plugin) to a Unity project, the editor will pull the latest version published to GitHub. It will then lock onto that version even if you push new changes to the repository. To release the lock and download the latest changes, go to the `Packages/manifest.json`-file and remove the entire `lock`-section.
+When you add this plugin (or a package created by this plugin) to a Unity project, the editor will pull the latest version published to GitHub. It will then lock onto that version even if new changes are pushed to the repository. To release the lock and download the latest changes, go to the `Packages/manifest.json`-file and remove the entire `lock`-section.
 
 ```json
   ...
