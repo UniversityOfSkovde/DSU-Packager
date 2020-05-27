@@ -3,7 +3,7 @@ Unity Editor Script created to make the process of sharing unity assets easier.
 
 Packages are a built-in feature of Unity. They allow you to share assets between projects while still keeping track of boring stuff such as versions, dependencies and licenses.
 
-This plugin adds a custom editor window that makes it easier to create a new package. The plugin also configures the new package folder as a local git repository with all the recommended settings for Unity projects (.gitignore, .gitattributes, git LFS, etc.). You can then easily upload the repository to github and track changes etc. Other people can then use your assets by just adding the GitHub URL inside their own Unity projects.
+This plugin adds a custom editor window that makes it easier to create a new package. The plugin also configures the new package folder as a local git repository with all the recommended settings for Unity projects (.gitignore, .gitattributes, git LFS, etc.). You can then easily upload the repository to github and track changes there. Other people can then use your assets by just adding the GitHub URL inside their own Unity projects.
 
 ## Prerequisites
 1. Make sure you have the following software installed:
