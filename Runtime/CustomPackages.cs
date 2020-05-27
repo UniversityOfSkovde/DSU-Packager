@@ -19,6 +19,7 @@ public class CustomPackagesWindow : EditorWindow
 {
     private static readonly string EDITOR_TEST_RUNNER_GUID = "27619889b8ba8c24980f49ee34dbb44a";
     private static readonly string ENGINE_TEST_RUNNER_GUID = "0acc523941302664db1f4e527237feb3";
+    private static readonly string LICENSE_FOLDER = "Packages/DSU Packager/Runtime/Licenses";
     
     private string packageName = "";
     private string authorName = "";
@@ -28,6 +29,25 @@ public class CustomPackagesWindow : EditorWindow
     private bool publicDomain = false;
     private bool noCommercialUse = false;
     private bool shareAlike = false;
+    
+    private string License { get {
+        string license;
+        if (publicDomain) license = "CC0";
+        else if (mit) license = "MIT";
+        else
+        {
+            if (noCommercialUse && shareAlike)
+                license = "CC-BY-NC-SA 4.0";
+            else if (noCommercialUse)
+                license = "CC-BY-NC 4.0";
+            else if (shareAlike)
+                license = "CC-BY-SA 4.0";
+            else
+                license = "CC-BY 4.0";
+        }
+
+        return license;
+    }}
 
     private Git git;
 
@@ -84,6 +104,7 @@ public class CustomPackagesWindow : EditorWindow
         if (!GenerateRepository(dirName)
         ||  !GenerateGitIgnore(dirName)
         ||  !GenerateGitAttributes(dirName)
+        ||  !GenerateLicenseText(dirName)
         ||  !GenerateRuntimeAndTestDir(dirName)
         ||  !GeneratePackageJson(dirName)) 
             return;
@@ -243,6 +264,106 @@ public class CustomPackagesWindow : EditorWindow
                && git.Commit(".gitattributes use Unity Smart Merging and git LFS");
     }
 
+    private bool GenerateLicenseText(string dirName)
+    {
+        if (License == "None") return true;
+        
+        var licenseFile = $"{dirName}/LICENSE.md";
+        var year = DateTime.Now.Year;
+        
+        using (var writer = File.CreateText(licenseFile))
+        {
+            var copyright = $"Copyright (c) {year} {authorName}";
+            switch (License)
+            {
+                case "MIT":
+                {
+                    string text;
+                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/mit.txt"))
+                    {
+                        text = reader.ReadToEnd()
+                            .Replace("[year]", year.ToString())
+                            .Replace("[fullname]", authorName);
+                    }
+                    writer.Write(text);
+                    break;
+                }
+                case "CC-BY-NC-SA 4.0":
+                {
+                    string text;
+                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-NC-SA-4.0.txt"))
+                    {
+                        text = reader.ReadToEnd();
+                    }
+                    writer.Write(text);
+                    break;
+                }
+                case "CC-BY-NC 4.0":
+                {
+                    string text;
+                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-NC-4.0.txt"))
+                    {
+                        text = reader.ReadToEnd();
+                    }
+                    writer.Write(text);
+                    break;
+                }
+                case "CC-BY-SA 4.0":
+                {
+                    string text;
+                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-SA-4.0.txt"))
+                    {
+                        text = reader.ReadToEnd();
+                    }
+                    writer.Write(text);
+                    break;
+                }
+                case "CC-BY 4.0":
+                {
+                    string text;
+                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-4.0.txt"))
+                    {
+                        text = reader.ReadToEnd();
+                    }
+                    writer.Write(text);
+                    break;
+                }
+                case "CC0":
+                {
+                    string text;
+                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC0.txt"))
+                    {
+                        text = reader.ReadToEnd();
+                    }
+                    writer.Write(text);
+                    break;
+                }
+                case "Apache 2.0":
+                {
+                    string text;
+                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/Apache-2.0.txt"))
+                    {
+                        text = reader.ReadToEnd()
+                            .Replace("[yyyy]", year.ToString())
+                            .Replace("[name of copyright owner]", authorName);
+                    }
+                    writer.Write(text);
+                    break;
+                }
+                default:
+                {
+                    Debug.LogError($"An unknown license '{License}' was requested.");
+                    writer.WriteLine("Unknown license.");
+                    break;
+                }
+            }
+            
+        }
+
+        return git.Add("LICENSE.md")
+               && git.Commit($"Added {License} license file.");
+    }
+
     private bool GenerateRuntimeAndTestDir(string dirName)
     {
         var runtimeDir = $"{dirName}/Runtime";
@@ -384,21 +505,8 @@ public class CustomPackagesWindow : EditorWindow
             }
         }
         
-        string license;
-        if (publicDomain) license = "CC0";
-        else if (mit) license = "MIT";
-        else
-        {
-            if (noCommercialUse && shareAlike)
-                license = "CC-BY-NC-SA 4.0";
-            else if (noCommercialUse)
-                license = "CC-BY-NC 4.0";
-            else if (shareAlike)
-                license = "CC-BY-SA 4.0";
-            else
-                license = "CC-BY 4.0";
-        }
-        GUILayout.Label($"Selected License: {license}");
+        
+        GUILayout.Label($"Selected License: {License}");
     }
 
     private void ShowSubmit()
