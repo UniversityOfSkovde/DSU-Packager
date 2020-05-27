@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEditor;
@@ -19,35 +20,54 @@ public class CustomPackagesWindow : EditorWindow
 {
     private static readonly string EDITOR_TEST_RUNNER_GUID = "27619889b8ba8c24980f49ee34dbb44a";
     private static readonly string ENGINE_TEST_RUNNER_GUID = "0acc523941302664db1f4e527237feb3";
-    private static readonly string LICENSE_FOLDER = "Packages/DSU Packager/Runtime/Licenses";
+    private static readonly string LICENSE_FOLDER = "Packages/dsu-packager/Runtime/Licenses";
     
     private string packageName = "";
     private string authorName = "";
     private string authorEmail = "";
-    
-    private bool mit = false;
-    private bool publicDomain = false;
-    private bool noCommercialUse = false;
-    private bool shareAlike = false;
-    
-    private string License { get {
-        string license;
-        if (publicDomain) license = "CC0";
-        else if (mit) license = "MIT";
-        else
-        {
-            if (noCommercialUse && shareAlike)
-                license = "CC-BY-NC-SA 4.0";
-            else if (noCommercialUse)
-                license = "CC-BY-NC 4.0";
-            else if (shareAlike)
-                license = "CC-BY-SA 4.0";
-            else
-                license = "CC-BY 4.0";
-        }
+    private LicenseType license = LicenseType.MIT;
 
-        return license;
-    }}
+    private enum LicenseType
+    {
+        CC0,
+        MIT,
+        Apache_2,
+        CC_BY,
+        CC_BY_NC,
+        CC_BY_SA,
+        CC_BY_NC_SA
+    }
+
+    private string LicenseName => LicenseNameOf(license);
+    private bool CreativeCommons => IsCreativeCommons(license);
+
+    private string LicenseNameOf(LicenseType type)
+    {
+        switch (type)
+        {
+            case LicenseType.CC0: return "CC0-1.0";
+            case LicenseType.MIT: return "MIT";
+            case LicenseType.Apache_2: return "Apache-2.0";
+            case LicenseType.CC_BY: return "CC-BY 4.0";
+            case LicenseType.CC_BY_NC: return "CC-BY-NC 4.0";
+            case LicenseType.CC_BY_SA: return "CC-BY-SA 4.0";
+            case LicenseType.CC_BY_NC_SA: return "CC-BY-NC-SA 4.0";
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private bool IsCreativeCommons(LicenseType type)
+    {
+        switch (type)
+        {
+            case LicenseType.CC_BY: return true;
+            case LicenseType.CC_BY_NC: return true;
+            case LicenseType.CC_BY_SA: return true;
+            case LicenseType.CC_BY_NC_SA: return true;
+            default: return false;
+        }
+    }
 
     private Git git;
 
@@ -266,17 +286,15 @@ public class CustomPackagesWindow : EditorWindow
 
     private bool GenerateLicenseText(string dirName)
     {
-        if (License == "None") return true;
-        
         var licenseFile = $"{dirName}/LICENSE.md";
         var year = DateTime.Now.Year;
         
         using (var writer = File.CreateText(licenseFile))
         {
-            var copyright = $"Copyright (c) {year} {authorName}";
-            switch (License)
+            switch (license)
             {
-                case "MIT":
+                default: throw new ArgumentOutOfRangeException();
+                case LicenseType.MIT:
                 {
                     string text;
                     using (var reader = new StreamReader($"{LICENSE_FOLDER}/mit.txt"))
@@ -288,7 +306,7 @@ public class CustomPackagesWindow : EditorWindow
                     writer.Write(text);
                     break;
                 }
-                case "CC-BY-NC-SA 4.0":
+                case LicenseType.CC_BY_NC_SA:
                 {
                     string text;
                     using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-NC-SA-4.0.txt"))
@@ -298,7 +316,7 @@ public class CustomPackagesWindow : EditorWindow
                     writer.Write(text);
                     break;
                 }
-                case "CC-BY-NC 4.0":
+                case LicenseType.CC_BY_NC:
                 {
                     string text;
                     using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-NC-4.0.txt"))
@@ -308,7 +326,7 @@ public class CustomPackagesWindow : EditorWindow
                     writer.Write(text);
                     break;
                 }
-                case "CC-BY-SA 4.0":
+                case LicenseType.CC_BY_SA:
                 {
                     string text;
                     using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-SA-4.0.txt"))
@@ -318,7 +336,7 @@ public class CustomPackagesWindow : EditorWindow
                     writer.Write(text);
                     break;
                 }
-                case "CC-BY 4.0":
+                case LicenseType.CC_BY:
                 {
                     string text;
                     using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-4.0.txt"))
@@ -328,7 +346,7 @@ public class CustomPackagesWindow : EditorWindow
                     writer.Write(text);
                     break;
                 }
-                case "CC0":
+                case LicenseType.CC0:
                 {
                     string text;
                     using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC0.txt"))
@@ -338,7 +356,7 @@ public class CustomPackagesWindow : EditorWindow
                     writer.Write(text);
                     break;
                 }
-                case "Apache 2.0":
+                case LicenseType.Apache_2:
                 {
                     string text;
                     using (var reader = new StreamReader($"{LICENSE_FOLDER}/Apache-2.0.txt"))
@@ -350,18 +368,12 @@ public class CustomPackagesWindow : EditorWindow
                     writer.Write(text);
                     break;
                 }
-                default:
-                {
-                    Debug.LogError($"An unknown license '{License}' was requested.");
-                    writer.WriteLine("Unknown license.");
-                    break;
-                }
             }
             
         }
 
         return git.Add("LICENSE.md")
-               && git.Commit($"Added {License} license file.");
+               && git.Commit($"Added {LicenseName} license file.");
     }
 
     private bool GenerateRuntimeAndTestDir(string dirName)
@@ -475,38 +487,59 @@ public class CustomPackagesWindow : EditorWindow
     private void ShowLegalFields()
     {
         GUILayout.Label ("Legal Stuff", EditorStyles.boldLabel);
+        int licenseChoice = (int) license;
+        if (licenseChoice > 2) licenseChoice = 3;
+        string[] licenseNames =
+        {
+            "Public Domain (CC0)", 
+            "MIT License", 
+            "Apache 2", 
+            "Creative Commons"
+        };
         
-        publicDomain = EditorGUILayout.Toggle("Public Domain (CC0)", publicDomain);
+        licenseChoice = GUILayout.SelectionGrid(licenseChoice, licenseNames, 1, EditorStyles.radioButton);
+        switch (licenseChoice)
+        {
+            case 0: license = LicenseType.CC0; break;
+            case 1: license = LicenseType.MIT; break;
+            case 2: license = LicenseType.Apache_2; break;
+            case 3:
+            {
+                if (!CreativeCommons) license = LicenseType.CC_BY;
+                break;
+            }
+        }
+        
         using (new EditorGUI.IndentLevelScope())
         {
-            using (new EditorGUI.DisabledScope(publicDomain))
+            using (new EditorGUI.DisabledScope(!CreativeCommons))
             {
-                if (publicDomain) EditorGUILayout.Toggle("MIT License", false);
-                else mit = EditorGUILayout.Toggle("MIT License", mit);
-                
-                using (new EditorGUI.IndentLevelScope())
+                if (CreativeCommons)
                 {
-                    using (new EditorGUI.DisabledScope(mit))
-                    {
-                        EditorGUILayout.LabelField("Creative Commons");
-                        if (publicDomain || mit)
-                        {
-                            EditorGUILayout.Toggle("Non-Commercial", false);
-                            EditorGUILayout.Toggle("Share Alike", false);
-                        }
-                        else
-                        {
-                            noCommercialUse = EditorGUILayout.Toggle("Non-Commercial", noCommercialUse);
-                            shareAlike = EditorGUILayout.Toggle("Share Alike", shareAlike);
-                        }
-                        
-                    }
+                    var noCommercialUse = license == LicenseType.CC_BY_NC || license == LicenseType.CC_BY_NC_SA;
+                    var shareAlike      = license == LicenseType.CC_BY_SA || license == LicenseType.CC_BY_NC_SA;
+                    
+                    noCommercialUse = EditorGUILayout.Toggle("Non-Commercial", noCommercialUse);
+                    shareAlike      = EditorGUILayout.Toggle("Share Alike", shareAlike);
+                    
+                    if (noCommercialUse && shareAlike)
+                        license = LicenseType.CC_BY_NC_SA;
+                    else if (noCommercialUse)
+                        license = LicenseType.CC_BY_NC;
+                    else if (shareAlike)
+                        license = LicenseType.CC_BY_SA;
+                    else
+                        license = LicenseType.CC_BY;
+                }
+                else
+                {
+                    EditorGUILayout.Toggle("Non-Commercial", false);
+                    EditorGUILayout.Toggle("Share Alike", false);
                 }
             }
         }
         
-        
-        GUILayout.Label($"Selected License: {License}");
+        GUILayout.Label($"Selected License: {LicenseName}");
     }
 
     private void ShowSubmit()
@@ -663,7 +696,8 @@ internal class Git
         process.WaitForExit();  // Make sure we wait till the process has fully finished.
         process.Close();        // Close the process ensuring it frees it resources.
 
-        if (errorOutput.StartsWith("warning: CRLF "))
+        if (errorOutput.StartsWith("warning: CRLF ")
+        ||  errorOutput.StartsWith("warning: LF "))
         {
             output = "";
             errorOutput = "";
