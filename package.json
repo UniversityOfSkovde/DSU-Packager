@@ -1,13 +1,15 @@
 {
-    "name": "se.his.dsu-packager",
-    "version": "1.0.0",
-    "displayName": "DSU Packager",
-    "description": "Custom Unity Package.",
-    "unity": "2019.3",
-    "dependencies": {},
-    "keywords": ["dsu", "skövde"],
-    "author": {
-        "name": "Emil Forslund",
-        "email": "emil.forslund@his.se"
-    }
+  "name": "se.his.dsu-packager",
+  "version": "1.0.1",
+  "displayName": "DSU Packager",
+  "description": "Custom Unity Package.",
+  "unity": "2019.3",
+  "keywords": [
+    "dsu",
+    "sk\u00f6vde"
+  ],
+  "author": {
+    "name": "Emil Forslund",
+    "email": "emil.forslund@his.se"
+  }
 }
