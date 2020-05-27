@@ -386,6 +386,7 @@ public class CustomPackagesWindow : EditorWindow
         
         string license;
         if (publicDomain) license = "CC0";
+        else if (mit) license = "MIT";
         else
         {
             if (noCommercialUse && shareAlike)
