@@ -13,6 +13,19 @@ Packages are a built-in feature of Unity. This plugin adds a custom editor windo
 4. Enter the URL: `https://github.com/UniversityOfSkovde/DSU-Packager.git` and press `Add`
 5. You can now find the plugin in the top menu under `DSU -> Create New Package`
 
+## Update To The Latest Version
+When you add this plugin (or a package created by this plugin) to a Unity project, the editor will pull the latest version published to GitHub. It will then lock onto that version even if you push new changes to the repository. To release the lock and download the latest changes, go to the `Packages/manifest.json`-file and remove the entire `lock`-section.
+
+```json
+  ...
+  "lock": {
+    "se.his.dsu-packager": {
+      "revision": "HEAD",
+      "hash": "9a808f660d49112200e0bf65a0e57a1d8b48ff21"      
+    }
+  }
+```
+
 ## Publishing a Unity Package
 Do you have some assets you want to share with the world using git?
 
