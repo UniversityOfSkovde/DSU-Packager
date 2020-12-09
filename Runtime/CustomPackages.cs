@@ -20,7 +20,7 @@ public class CustomPackagesWindow : EditorWindow
 {
     private static readonly string EDITOR_TEST_RUNNER_GUID = "27619889b8ba8c24980f49ee34dbb44a";
     private static readonly string ENGINE_TEST_RUNNER_GUID = "0acc523941302664db1f4e527237feb3";
-    private static readonly string LICENSE_FOLDER = "Packages/dsu-packager/Runtime/Licenses";
+    private static readonly string LICENSE_FOLDER = "Packages/se.his.dsu-packager/Runtime/Licenses";
     
     private string packageName = "";
     private string authorName = "";
@@ -70,7 +70,7 @@ public class CustomPackagesWindow : EditorWindow
     }
 
     private static string PackagedPath(string localPath) {
-        return Path.GetFullPath(localPath);
+        return $"{LICENSE_FOLDER}/{localPath}";
     }
 
     private Git git;
@@ -301,7 +301,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.MIT:
                 {
                     string text;
-                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/mit.txt")))
+                    using (var reader = new StreamReader(PackagedPath("mit.txt")))
                     {
                         text = reader.ReadToEnd()
                             .Replace("[year]", year.ToString())
@@ -313,7 +313,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY_NC_SA:
                 {
                     string text;
-                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC-BY-NC-SA-4.0.txt")))
+                    using (var reader = new StreamReader(PackagedPath("CC-BY-NC-SA-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -323,7 +323,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY_NC:
                 {
                     string text;
-                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC-BY-NC-4.0.txt")))
+                    using (var reader = new StreamReader(PackagedPath("CC-BY-NC-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -333,7 +333,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY_SA:
                 {
                     string text;
-                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC-BY-SA-4.0.txt")))
+                    using (var reader = new StreamReader(PackagedPath("CC-BY-SA-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -343,7 +343,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY:
                 {
                     string text;
-                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC-BY-4.0.txt")))
+                    using (var reader = new StreamReader(PackagedPath("CC-BY-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -353,7 +353,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC0:
                 {
                     string text;
-                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC0.txt")))
+                    using (var reader = new StreamReader(PackagedPath("CC0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -363,7 +363,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.Apache_2:
                 {
                     string text;
-                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/Apache-2.0.txt")))
+                    using (var reader = new StreamReader(PackagedPath("Apache-2.0.txt")))
                     {
                         text = reader.ReadToEnd()
                             .Replace("[yyyy]", year.ToString())
