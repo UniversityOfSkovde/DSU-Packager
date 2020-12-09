@@ -333,7 +333,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY_SA:
                 {
                     string text;
-                    using (var reader = new StreamReaderPackagedPath(($"{LICENSE_FOLDER}/CC-BY-SA-4.0.txt")))
+                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC-BY-SA-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -343,7 +343,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY:
                 {
                     string text;
-                    using (var reader = new StreamReaderPackagedPath(($"{LICENSE_FOLDER}/CC-BY-4.0.txt")))
+                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC-BY-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -353,7 +353,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC0:
                 {
                     string text;
-                    using (var reader = new StreamReaderPackagedPath(($"{LICENSE_FOLDER}/CC0.txt")))
+                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -363,7 +363,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.Apache_2:
                 {
                     string text;
-                    using (var reader = new StreamReaderPackagedPath(($"{LICENSE_FOLDER}/Apache-2.0.txt")))
+                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/Apache-2.0.txt")))
                     {
                         text = reader.ReadToEnd()
                             .Replace("[yyyy]", year.ToString())
