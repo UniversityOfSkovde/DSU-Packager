@@ -69,6 +69,10 @@ public class CustomPackagesWindow : EditorWindow
         }
     }
 
+    private static string PackagedPath(string localPath) {
+        return Path.GetFullPath(localPath);
+    }
+
     private Git git;
 
     public CustomPackagesWindow()
@@ -288,7 +292,7 @@ public class CustomPackagesWindow : EditorWindow
     {
         var licenseFile = $"{dirName}/LICENSE.md";
         var year = DateTime.Now.Year;
-        
+
         using (var writer = File.CreateText(licenseFile))
         {
             switch (license)
@@ -297,7 +301,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.MIT:
                 {
                     string text;
-                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/mit.txt"))
+                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/mit.txt")))
                     {
                         text = reader.ReadToEnd()
                             .Replace("[year]", year.ToString())
@@ -309,7 +313,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY_NC_SA:
                 {
                     string text;
-                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-NC-SA-4.0.txt"))
+                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC-BY-NC-SA-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -319,7 +323,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY_NC:
                 {
                     string text;
-                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-NC-4.0.txt"))
+                    using (var reader = new StreamReader(PackagedPath($"{LICENSE_FOLDER}/CC-BY-NC-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -329,7 +333,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY_SA:
                 {
                     string text;
-                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-SA-4.0.txt"))
+                    using (var reader = new StreamReaderPackagedPath(($"{LICENSE_FOLDER}/CC-BY-SA-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -339,7 +343,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC_BY:
                 {
                     string text;
-                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC-BY-4.0.txt"))
+                    using (var reader = new StreamReaderPackagedPath(($"{LICENSE_FOLDER}/CC-BY-4.0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -349,7 +353,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.CC0:
                 {
                     string text;
-                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/CC0.txt"))
+                    using (var reader = new StreamReaderPackagedPath(($"{LICENSE_FOLDER}/CC0.txt")))
                     {
                         text = reader.ReadToEnd();
                     }
@@ -359,7 +363,7 @@ public class CustomPackagesWindow : EditorWindow
                 case LicenseType.Apache_2:
                 {
                     string text;
-                    using (var reader = new StreamReader($"{LICENSE_FOLDER}/Apache-2.0.txt"))
+                    using (var reader = new StreamReaderPackagedPath(($"{LICENSE_FOLDER}/Apache-2.0.txt")))
                     {
                         text = reader.ReadToEnd()
                             .Replace("[yyyy]", year.ToString())
