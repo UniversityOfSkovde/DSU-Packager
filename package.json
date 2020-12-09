@@ -1,8 +1,8 @@
 {
   "name": "se.his.dsu-packager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "DSU Packager",
-  "description": "Custom Unity Package.",
+  "description": "Editor Plugin that makes it easier to generate custom packages and bundle them as git-repositories.",
   "unity": "2019.3",
   "keywords": [
     "dsu",
