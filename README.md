@@ -35,7 +35,7 @@ Do you have some assets you want to share with the world using git?
 2. Fill in the name, author and license you want for the new package
 3. Press `Generate Package Folder!` and wait a few seconds
 
-The new package should now shop up in the `Project` as a subdirectory of `Packages`
+The new package should now show up in the `Project` as a subdirectory of `Packages`
 1. Move all the assets you want to share to the `Runtime`-directory of your new package
 2. Use the commands `git add -A` and `git commit -m "Uploading files"` to version control the files you just moved
 
@@ -46,7 +46,7 @@ To share the new package, open a browser and go to github.com (create a new acco
 4. Others can now add your package to their projects using the `Add Package From git URL...` option described above.
 
 ## License
-Copyright 2020 Emil Forslund
+Copyright 2020-2021 Emil Forslund
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
